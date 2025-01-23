@@ -32,7 +32,7 @@
 <body class="bg-darkbg text-white min-h-screen flex flex-col">
     <!-- Header -->
     <header class="bg-green-900 p-4">
-        <h1 class="text-center text-2xl font-bold">University of Greenfield</h1>
+        <a href="/"><h1 class="text-2xl font-bold text-center text-white">University of Greenfield</h1></a>
     </header>
 
     <!-- Main Content -->
@@ -58,12 +58,12 @@
                     
                 </div> 
                 <!-- two step Authentication -->
-                 <!--I'll figure how to let a user add one-->
-                <!-- <div>
-                    <label for="twoStepAuth" class="block text-sm font-medium text-gray-300">2 Step Auth</label>
-                    <input type="text" id="twoStepAuth" name="twoStepAuth"
+                 <!--admins will have an ID set for them in the DB when I make it-->
+                <div>
+                    <label for="adminID" class="block text-sm font-medium text-gray-300">Admin ID</label>
+                    <input type="text" id="adminID" name="adminID" required
                         class="mt-1 block w-full px-3 py-2 input-dark border border-gray-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                </div> -->
+                </div>
 
                 <div>
                     <button type="submit"
