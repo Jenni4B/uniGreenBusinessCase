@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University of Greenfield</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #121212; /* Dark background */
+            color: #ffffff; /* White text */
+        }
+
+        .btn-green, header {
+            background-color: #14532d; /* Dark green */
+            color: #ffffff; /* White text */
+        }
+
+        .btn-green:hover {
+            background-color: #006941; /* Slightly brighter green for hover */
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <header class="bg-green-900 p-4">
+        <h1 class="text-2xl font-bold text-center text-white">University of Greenfield</h1>
+    </header>
+
+    <main class="flex-grow flex flex-col items-center justify-center p-4">
+        <h2 class="text-3xl font-bold mb-8">LOGIN</h2>
+        
+        <div class="space-y-4 w-full max-w-md">
+            <a href="/login"><button class="btn-green w-full font-bold py-3 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105">
+                Student
+            </button></a>
+            <button class="btn-green w-full font-bold py-3 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105">
+                Staff
+            </button>
+            <button class="btn-green w-full font-bold py-3 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105">
+                Admin
+            </button>
+        </div>
+    </main>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

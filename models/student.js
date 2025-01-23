@@ -15,6 +15,10 @@ const student = dbconn.define('student', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    date_of_birth:{
+      type: DataTypes.DATE,
+      allowNull: false
+    },
     gender: {
         // Male, Female, Other
     },
