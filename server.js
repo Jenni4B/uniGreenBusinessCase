@@ -7,7 +7,9 @@ app.set('view engine', 'ejs');
 
 // Define the root route to render your EJS file
 app.get('/', (req, res) => res.render('homepage')); // root route
-app.get('/login', (req, res) => res.render('login')); // render login page
+app.get('/studentlogin', (req, res) => res.render('studentlogin')); // render login page
+app.get('/facultylogin', (req, res) => res.render('studentlogin'));
+app.get('/adminlogin', (req, res) => res.render('studentlogin'));
 
 // Login Logic/Authentication
 // 
