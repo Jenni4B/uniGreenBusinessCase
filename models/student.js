@@ -28,10 +28,9 @@ const student = dbconn.define('student', {
       unique: true,
       allowNull: false
     },
-    password_hash: {
+    pwd_hash: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: 'password_hash'
     }
   });
 
