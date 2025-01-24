@@ -1,40 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>University of GreensField</title>
-    
+    <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#00FF00',
-                    }
-                }
-            }
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <style>
+        body {
+            background-color: #121212; /* Dark background */
+            color: #ffffff; /* White text */
         }
-    </script>
 
+        .btn-green, header {
+            background-color: #14532d; /* Dark green */
+            color: #ffffff; /* White text */
+        }
+
+        .btn-green:hover {
+            background-color: #006941; /* Slightly brighter green for hover */
+        }
+
+        .input-dark {
+            background-color: #1E1E1E; /* Dark input background */
+            color: #ffffff; /* White text */
+        }
+    </style>
 </head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4">
+        <header class="py-4">
+            <nav class="flex justify-between items-center">
+                <div class="space-x-4">
+                    <button class="bg-gray-800 text-white px-4 py-2 rounded-full">Home</button>
+                    <button class="bg-gray-800 text-white px-4 py-2 rounded-full">Dashboard</button>
+                    <button class="bg-gray-800 text-white px-4 py-2 rounded-full">Admin</button>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <i data-feather="bell" class="text-orange-500"></i>
+                    <div class="w-8 h-8 bg-gray-500 rounded-full"></div>
+                    <button class="bg-gray-800 text-white px-4 py-2 rounded-full">Profile</button>
+                </div>
+            </nav>
+        </header>
+        <hr class="border-gray-700 my-4">
+        <main class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <section>
+                <h2 class="text-2xl font-bold mb-4">Announcements</h2>
+                <div class="bg-gray-800 rounded-lg p-4 space-y-4">
+                    <div class="bg-gray-700 rounded p-2">Announcement 1</div>
+                    <div class="bg-gray-700 rounded p-2">Announcement 2</div>
+                    <div class="bg-gray-700 rounded p-2">Announcement 3</div>
+                    <button class="mt-4 bg-gray-700 rounded-full p-2">
+                        <i data-feather="plus" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </section>
+            <section>
+                <h2 class="text-2xl font-bold mb-4">Schedule</h2>
+                <div class="bg-gray-800 rounded-lg p-4">
+                    <div id="calendar"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script>
+        feather.replace();
 
-<body>
-
-    <header class="p-4">
-
-        <nav class="flex justify-between items-center">
-            <a href="/" class="text-2xl font-bold text-primary">Univeristy of GreenField</a>
-        </nav>
-
-    </header>
-
-    <main>
-
-    </main>
-    <%- include('partials/footer') %>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                height: 'auto',
+                themeSystem: 'standard',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                buttonText: {
+                    today: 'Today',
+                    month: 'Month',
+                    week: 'Week',
+                    day: 'Day'
+                },
+                eventColor: '#4a5568',
+                eventTextColor: '#ffffff',
+                dayCellClassNames: 'bg-gray-700',
+                dayHeaderClassNames: 'bg-gray-800 text-white',
+                nowIndicatorClassNames: 'bg-blue-500',
+            });
+            calendar.render();
+        });
+    </script>
 </body>
 </html>
