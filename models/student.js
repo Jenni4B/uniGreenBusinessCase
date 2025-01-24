@@ -33,8 +33,5 @@ const student = dbconn.define('student', {
       allowNull: false,
     }
   });
-
-  // student.hasMany(Transaction, { foreignKey: 'student_id' });
-
-
+  
 export default student;
