@@ -20,7 +20,8 @@ const student = dbconn.define('student', {
       allowNull: false
     },
     gender: {
-        // Male, Female, Other
+      type: DataTypes.ENUM('Male', 'Female', 'Other'), // ENUM definition
+      allowNull: false,
     },
     email: {
       type: DataTypes.STRING,

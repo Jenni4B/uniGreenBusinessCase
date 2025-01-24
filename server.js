@@ -1,4 +1,6 @@
 import express from 'express'; // es6 module import
+import { ensureAuthenticated } from './middleware/ensureGuest.js';
+import { ensureGuest } from './middleware/ensureGuest.js';
 const app = express();
 const PORT = 3000;
 
@@ -11,7 +13,9 @@ app.get('/studentlogin', (req, res) => res.render('studentlogin')); // render lo
 app.get('/facultylogin', (req, res) => res.render('facultylogin'));
 app.get('/adminlogin', (req, res) => res.render('adminlogin'));
 
-
+import authRoutes from './routes/auth.js';
+app.use('/', authRoutes);
+app.use('/dashboard', ensureAuthenticated, ensureGuest);
 // Login Logic/Authentication
 // 
 
