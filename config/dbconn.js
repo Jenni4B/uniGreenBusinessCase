@@ -11,7 +11,6 @@ const sequelize = new Sequelize(
         dialect: "mysql"
     }
 );
-
     // Auth to ensure DB connection
 
     try {

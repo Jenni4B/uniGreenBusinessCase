@@ -3,9 +3,9 @@ import bcrypt from 'bcryptjs';
 import student from '../models/student.js';
 import { ensureGuest } from '../middleware/ensureGuest.js';
 
-const loginRouter = express.Router();
+const studentLoginRouter = express.Router();
 
-loginRouter.post("/login", ensureGuest, async (req, res) => {
+studentLoginRouter.post("/login", ensureGuest, async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -30,4 +30,4 @@ loginRouter.post("/login", ensureGuest, async (req, res) => {
 });
 
 
-export default loginRouter;
+export default studentLoginRouter;
