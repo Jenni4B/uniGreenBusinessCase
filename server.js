@@ -1,23 +1,28 @@
-import express from 'express'; // es6 module import
-import { ensureAuthenticated } from './middleware/ensureGuest.js';
-import { ensureGuest } from './middleware/ensureGuest.js';
+import express from 'express'; // ES6 module import
+import { ensureGuest, ensureAuthenticated } from './middleware/ensureGuest.js';
+import authRoutes from "./routes/authRoutes.js";
+
 const app = express();
 const PORT = 3000;
 
 // Set EJS as the templating engine
 app.set('view engine', 'ejs');
 
-// Define the root route to render your EJS file
-app.get('/', (req, res) => res.render('homepage')); // root route
-app.get('/studentlogin', (req, res) => res.render('studentlogin')); // render login page
-app.get('/facultylogin', (req, res) => res.render('facultylogin'));
-app.get('/adminlogin', (req, res) => res.render('adminlogin'));
+// Middleware
+app.use(express.json()); // Parses JSON request bodies
+app.use(express.urlencoded({ extended: true })); // Parses URL-encoded data
 
-import authRoutes from './routes/auth.js';
-app.use('/', authRoutes);
+// Routes
+app.get('/', (req, res) => res.render('homepage')); // Root route
+app.get('/studentlogin', (req, res) => res.render('studentlogin')); // Student login page
+app.get('/facultylogin', (req, res) => res.render('facultylogin')); // Faculty login page
+app.get('/adminlogin', (req, res) => res.render('adminlogin')); // Admin login page
+
+// Authentication routes
+app.use("/auth", authRoutes);
+
+// Dashboard route (ensure user is authenticated and not a guest)
 app.use('/dashboard', ensureAuthenticated, ensureGuest);
-// Login Logic/Authentication
-// 
 
 // Start the server
 app.listen(PORT, () => {
