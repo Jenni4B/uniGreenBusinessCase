@@ -5,41 +5,64 @@ import { ensureGuest } from '../middleware/ensureGuest.js';
 
 const adminLoginRoute = express.Router();
 
-adminLoginRoute.post("/login", ensureGuest, async (req, res) => {
-    const { email, password } = req.body;
+// Handle admin login and validate credentials
+adminLoginRoute.post("/", ensureGuest, async (req, res) => {
+    const { email, password, adminID } = req.body;
 
     try {
+        // Validate input
+        if (!email || !password || !adminID) {
+            return res.status(400).json({ message: "Email, password, and Admin ID are required" });
+        }
+
         // Fetch the admin record from the database
         const validAdmin = await admin.findOne({ where: { email } });
 
         if (!validAdmin) {
+            console.log("Login failed: Admin not found.");
             return res.status(404).json({ message: "Admin not found" });
         }
 
-        // Compare the password with the stored hash
-        const isMatch = await bcrypt.compare(password, validAdmin.pwd_hash);
+        // Verify Admin ID matches
+        const adminIDMatch = await bcrypt.compare(password, validAdmin.two_stepHash);
 
-        if (!isMatch) {
+        if (!adminIDMatch) {
+            console.log("Login failed: Invalid Credentials.");
+            return res.status(401).json({ message: "Invalid credentials" });
+        }
+        // Compare the password with the stored hash
+
+        const pwdMatch = await bcrypt.compare(password, validAdmin.pwd_hash);
+
+        if (!pwdMatch) {
+            console.log("Login failed: Invalid credentials.");
             return res.status(401).json({ message: "Invalid credentials" });
         }
 
         // Set up session for the admin
         req.session.adminId = validAdmin.id;
+        req.session.adminEmail = validAdmin.email;
 
-        // Redirect to dashboard route
-        return res.redirect('/dashboard');
+        console.log("Login successful for an admin.");
+
+        // Redirect to dashboard
+        return res.redirect("/dashboard");
     } catch (error) {
-        console.log("Error logging in:", error);
+        console.error(`Error during login: ${error}`);
         res.status(500).json({ message: "An error occurred during login." });
     }
 });
 
-// Add a new route to render the dashboard
+// Render the admin dashboard
 adminLoginRoute.get("/dashboard", (req, res) => {
     // Check if admin is logged in
     if (!req.session.adminId) {
-        return res.redirect('/login'); // Redirect to the login page if not logged in
+        console.log("Unauthorized access attempt to /dashboard. Redirecting to /adminLogin.");
+        return res.redirect('/adminLogin'); // Redirect to the admin login page
     }
+
+    // Log access
+    console.log(`Admin with ID ${req.session.adminId} accessed the dashboard.`);
 
     // Render the dashboard.ejs template
     res.render('dashboard', { admin: { email: req.session.adminEmail || "Admin" } });

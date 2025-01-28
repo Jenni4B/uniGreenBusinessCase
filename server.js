@@ -1,4 +1,5 @@
 import express from 'express'; // ES6 module import
+import session from 'express-session'; // For session management
 import { ensureGuest, ensureAuthenticated } from './middleware/ensureGuest.js';
 import adminLoginRoute from './routes/adminRoute.js';
 
@@ -12,17 +13,25 @@ app.set('view engine', 'ejs');
 app.use(express.json()); // Parses JSON request bodies
 app.use(express.urlencoded({ extended: true })); // Parses URL-encoded data
 
+// Session Middleware
+app.use(session({
+    secret: 'randomkey',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false } // Set secure: true for HTTPS
+}));
+
+// Static Files Middleware
+app.use(express.static('public'));
+
 // Routes
 app.get('/', (req, res) => res.render('homepage')); // Root route
-app.get('/studentlogin', (req, res) => res.render('studentlogin')); // Student login page
-app.get('/facultylogin', (req, res) => res.render('facultylogin')); // Faculty login page
-app.get('/adminlogin', (req, res) => res.render('adminlogin')); // Admin login page
+app.get('/studentlogin', (req, res) => res.render('studentloginpage')); // Student login page
+app.get('/facultylogin', (req, res) => res.render('facultyloginpage')); // Faculty login page
+app.get('/adminlogin', (req, res) => res.render('adminloginpage')); // Admin login page
 
-app.get("/adminLogin", adminLoginRoute);
-
-
-// Dashboard route (ensure user is authenticated and not a guest)
-app.use('/dashboard', ensureAuthenticated, ensureGuest);
+// Mount Admin Login Router
+app.use("/adminLogin", adminLoginRoute);
 
 // Start the server
 app.listen(PORT, () => {
