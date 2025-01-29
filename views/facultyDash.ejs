@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto p-4">
+        <header class="flex justify-between items-center mb-6">
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a href="#" class="px-4 py-2 bg-gray-800 rounded-md hover:bg-gray-700">Home</a></li>
+                    <li><a href="#" class="px-4 py-2 bg-gray-800 rounded-md hover:bg-gray-700">Dashboard</a></li>
+                </ul>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <a href="#" class="px-4 py-2 bg-gray-800 rounded-md hover:bg-gray-700">Help</a>
+                <button class="text-yellow-500"><i data-feather="bell"></i></button>
+                <button class="text-gray-400"><i data-feather="user"></i></button>
+            </div>
+        </header>
+
+        <main class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <section>
+                <h2 class="text-xl font-bold mb-4">Announcements</h2>
+                <div class="space-y-4">
+                    <div class="p-4 bg-gray-800 rounded-md">Announcement 1</div>
+                    <div class="p-4 bg-gray-800 rounded-md">Announcement 2</div>
+                    <div class="p-4 bg-gray-800 rounded-md">Announcement 3</div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-bold mb-4">Classes/Students</h2>
+                <div class="space-y-4">
+                    <div class="p-4 bg-gray-800 rounded-md">Class 1</div>
+                    <div class="p-4 bg-gray-800 rounded-md">Class 2</div>
+                    <div class="p-4 bg-gray-800 rounded-md">Class 3</div>
+                </div>
+            </section>
+        </main>
+
+        <section class="mt-6">
+            <h2 class="text-xl font-bold mb-4">Schedule</h2>
+            <div class="p-4 bg-gray-800 rounded-md">
+                <h3 class="text-lg font-semibold mb-2">Calendar</h3>
+                <div id="calendar"></div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        feather.replace();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                height: 'auto',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                themeSystem: 'standard',
+                events: [
+                    {
+                        title: 'Event 1',
+                        start: '2023-06-01'
+                    },
+                    {
+                        title: 'Event 2',
+                        start: '2023-06-05',
+                        end: '2023-06-07'
+                    }
+                ]
+            });
+            calendar.render();
+        });
+    </script>
+</body>
+</html>
