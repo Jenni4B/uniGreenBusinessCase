@@ -26,7 +26,7 @@ app.use(session({
 app.use(express.static('public'));
 
 // Routes to the main page and login page
-app.get('/', (req, res) => res.render('homepage')); // Root route
+app.get('/', (req, res) => res.render('dashboard')); // Root route
 app.get('/studentlogin', (req, res) => res.render('./loginpages/studentloginpage')); // Student login page
 app.get('/facultylogin', (req, res) => res.render('./loginpages/facultyloginpage')); // Faculty login page
 app.get('/adminlogin', (req, res) => res.render('./loginpages/adminloginpage')); // Admin login page
