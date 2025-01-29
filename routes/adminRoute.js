@@ -46,7 +46,7 @@ adminLoginRoute.post("/", ensureGuest, async (req, res) => {
         console.log("Login successful for an admin.");
 
         // Redirect to dashboard
-        return res.render('dashboard', { admin: { email: req.session.adminEmail || "Admin" } });
+        return res.redirect("/dashboard");
     } catch (error) {
         console.error(`Error during login: ${error}`);
         res.status(500).json({ message: "An error occurred during login." });
@@ -58,12 +58,11 @@ adminLoginRoute.get("/dashboard", (req, res) => {
     // Check if admin is logged in
     if (!req.session.adminId) {
         console.log("Unauthorized access attempt to /dashboard. Redirecting to /adminLogin.");
-        return res.redirect('/adminloginpage'); 
-        // Redirect to the login page if the user doesn't have a session or is expired
+        return res.redirect('/adminLogin'); // Redirect to the admin login page
     }
 
     // Log access
-    console.log(`Admin with ID ${req.session.adminId} accessed the dashboard.`); // alerts server of access
+    console.log(`Admin with ID ${req.session.adminId} accessed the dashboard.`);
 
     // Render the dashboard.ejs template
     res.render('dashboard', { admin: { email: req.session.adminEmail || "Admin" } });

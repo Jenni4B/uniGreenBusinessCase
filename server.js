@@ -1,7 +1,8 @@
 import express from 'express'; // ES6 module import
 import session from 'express-session'; // For session management
-import { ensureGuest, ensureAuthenticated } from './middleware/ensureGuest.js';
 import adminLoginRoute from './routes/adminRoute.js';
+import facultyLoginRouter from './routes/facultyRoute.js';
+import studentLoginRouter from './routes/studentRoute.js';
 
 const app = express();
 const PORT = 3000;
@@ -32,6 +33,8 @@ app.get('/adminlogin', (req, res) => res.render('./loginpages/adminloginpage'));
 
 // Mount Admin Login Router
 app.use("/adminLogin", adminLoginRoute);
+app.use("/facultyLogin", facultyLoginRouter);
+app.use("/studentLogin", studentLoginRouter);
 
 // Start the server
 app.listen(PORT, () => {
