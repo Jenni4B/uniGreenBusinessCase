@@ -1,9 +1,10 @@
 import express from 'express'; // ES6 module import
 import session from 'express-session'; // For session management
+
 import adminLoginRoute from './routes/adminRoute.js';
 import facultyLoginRouter from './routes/facultyRoute.js';
 import studentLoginRouter from './routes/studentRoute.js';
-// import {addAnnouncementRouter, createAnnoucement} from './modalsAndForms/annoucementAdd.js';
+import addAnnouncementRouter from './modalsAndForms/annoucementAdd.js';
 
 
 const app = express();
@@ -37,7 +38,7 @@ app.get('/adminlogin', (req, res) => res.render('./loginpages/adminloginpage'));
 app.use("/adminLogin", adminLoginRoute);
 app.use("/facultyLogin", facultyLoginRouter);
 app.use("/studentLogin", studentLoginRouter);
-
+app.use("/addAnnoucement", addAnnouncementRouter);
 
 // Start the server
 app.listen(PORT, () => {
