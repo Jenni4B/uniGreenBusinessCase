@@ -1,6 +1,6 @@
 import express from 'express'; // ES6 module import
 import session from 'express-session'; // For session management
-
+import bodyParser from 'body-parser';
 import adminLoginRoute from './routes/adminRoute.js';
 import facultyLoginRouter from './routes/facultyRoute.js';
 import studentLoginRouter from './routes/studentRoute.js';
@@ -44,5 +44,5 @@ app.use("/addAnnoucement", addAnnouncementRouter);
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server is running at http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
