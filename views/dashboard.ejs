@@ -7,7 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Styling the main themes -->
     <style>
         body {
@@ -30,6 +31,11 @@
         }
     </style>
 </head>
+
+<!-- <script type="module">
+    import createAnnoucementModal from './modalsAndForms/createModal.js'
+    createAnnoucementModal()
+</script> -->
 
 
 <body class="min-h-screen">
@@ -66,25 +72,40 @@
                 <div class="bg-gray-800 rounded-lg p-4 space-y-4">
                     <div class="bg-gray-700 rounded p-2">Valentine's Day Dance Feb. 14th!</div>
 
-                    <button class="mt-4 bg-gray-700 rounded-full p-2">
-                        <i data-feather="plus" class="w-6 h-6"></i>
-                    </button>
+                    <!-- Announcement Modal -->
+                    <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content bg-gray-800 text-white">
+                                <div class="modal-header border-gray-700">
+                                    <h5 class="modal-title" id="announcementModalLabel">New Announcement</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="announcementTitle" class="form-label">Title</label>
+                                        <input type="text" class="form-control bg-gray-700 text-black" id="announcementTitle" placeholder="Enter announcement title" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="announcementMessage" class="form-label">Message</label>
+                                        <textarea id="announcementMessage" class="form-control bg-gray-700 text-black" placeholder="Type your announcement..." rows="4" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-gray-700">
+                                    <button type="button" id="submitAnnouncement" class="btn btn-success">Submit</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <!-- Button to Open Modal -->
+                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#announcementModal">
+                    <i data-feather="plus" class="w-6 h-6"></i>
+                </button>
+
                     
                 </div>
             </section>
-
-            <!-- ANNOUCEMENT FORM FOR ADMIN -->
-             <!-- hidden at first until the button is clicked -->
-            <div id="announcementForm" class="hidden fixed inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center">
-                <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-                    <h2 class="text-lg font-semibold mb-2">New Announcement</h2>
-                    <textarea id="announcementMessage" class="w-full p-2 border rounded" placeholder="Type your announcement..."></textarea>
-                    <button id="submitAnnouncement" class="mt-4 bg-blue-500 text-white p-2 rounded">Submit</button>
-                    <button id="closeForm" class="mt-2 text-gray-500">Cancel</button>
-                </div>
-            </div>
-
-            <script src="./modalsAndForms/createModal.js"></script>
 
             <section> <!--Calender div-->
                 <h2 class="text-2xl font-bold mb-4">Schedule</h2>

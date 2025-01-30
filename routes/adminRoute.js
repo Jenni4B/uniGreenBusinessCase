@@ -2,14 +2,22 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import admin from '../models/admin.js';
 import { ensureGuest } from '../middleware/ensureGuest.js';
+import { verifyPassword, verifyTwoStep } from '../middleware/verification.js';
 
 const adminLoginRoute = express.Router();
+
+                        //  REMINDER
+
+// Reminder to come back in and import the verifyPassword and verifyTwoStep so I can cut down on the lines of code in this file
+// by actually using code lol
+
 
 // Handle admin login and validate credentials
 adminLoginRoute.post("/", ensureGuest, async (req, res) => {
     const { email, password, adminID } = req.body;
 
     try {
+
         // Validate input
         if (!email || !password || !adminID) {
             return res.status(400).json({ message: "Email, password, and Admin ID are required" });

@@ -3,23 +3,11 @@ export function createAnnouncementModal() {
         const addBtn = document.getElementById("addAnnouncementBtn");
         const form = document.getElementById("announcementForm");
         const submitBtn = document.getElementById("submitAnnouncement");
-        const closeBtn = document.getElementById("closeForm");
 
-        if (!addBtn || !form || !submitBtn || !closeBtn) {
+        if (!addBtn || !form || !submitBtn) {
             console.error("One or more elements are missing from the DOM.");
             return;
         }
-
-        // Show the form when the button is clicked
-        addBtn.addEventListener("click", () => {
-            form.classList.remove("hidden");
-            console.log("Add Announcement button clicked");
-        });
-
-        // Hide the form when cancel is clicked
-        closeBtn.addEventListener("click", () => {
-            form.classList.add("hidden");
-        });
 
         // Handle form submission
         submitBtn.addEventListener("click", async () => {
@@ -40,13 +28,19 @@ export function createAnnouncementModal() {
                 if (!response.ok) throw new Error("Failed to create announcement");
 
                 alert("Announcement created successfully!");
-                form.classList.add("hidden"); // Hide form after submission
-                document.getElementById("announcementMessage").value = ""; // Clear input
+                
+                // Hide Bootstrap modal properly
+                const modal = bootstrap.Modal.getInstance(document.getElementById("announcementModal"));
+                modal.hide();
 
+                document.getElementById("announcementMessage").value = ""; // Clear input
             } catch (error) {
                 console.error("Error:", error);
                 alert("Error creating announcement.");
             }
         });
+
+        // Ensure Feather icons load
+        feather.replace();
     });
 }
