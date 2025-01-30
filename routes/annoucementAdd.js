@@ -1,5 +1,5 @@
 import express from 'express';
-import Announcement from './models/announcements.js'; // Import Sequelize model
+import Announcement from '../models/annoucements.js'; // Import Sequelize model
 
 const addAnnouncementRouter = express.Router();
 

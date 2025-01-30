@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../config/database.js'; // Import your Sequelize connection
+import sequelize from '../config/dbconn.js'; // Import your Sequelize connection
 
 const Announcement = sequelize.define('Announcement', {
     annnouncement_id: {
