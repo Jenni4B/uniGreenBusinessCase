@@ -1,5 +1,5 @@
 import express from 'express'; // ES6 module import
-import session from 'express-session'; // For session management
+// import session from 'express-session'; // For session management
 // import bodyParser from 'body-parser';
 import adminLoginRoute from './routes/adminRoute.js';
 import facultyLoginRouter from './routes/facultyRoute.js';

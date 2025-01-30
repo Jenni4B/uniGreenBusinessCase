@@ -25,7 +25,12 @@ export function createAnnouncementModal() {
                     body: JSON.stringify({ message }),
                 });
 
-                if (!response.ok) throw new Error("Failed to create announcement");
+                if (!response.ok) {
+                    console.error('Error creating announcement:');
+                    console.error('Status:', response.status);
+                    console.error('Status Text:', response.statusText);
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
 
                 alert("Announcement created successfully!");
                 
