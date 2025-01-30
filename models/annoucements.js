@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../config/dbconn.js'; // Import your Sequelize connection
 
 const Announcement = sequelize.define('Announcement', {
-    annnouncement_id: {
+    announcement_id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
@@ -14,14 +14,6 @@ const Announcement = sequelize.define('Announcement', {
     message: {
         type: DataTypes.STRING,
         allowNull: false, // Message is required
-    },
-    admin_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: 'admins', // The name of the referenced table
-            key: 'admin_id' // The primary key of the referenced table
-        }
     },
 }, {
     timestamps: true, // Adds createdAt and updatedAt fields automatically

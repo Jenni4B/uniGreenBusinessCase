@@ -1,11 +1,11 @@
 import express from 'express'; // ES6 module import
 import session from 'express-session'; // For session management
-import bodyParser from 'body-parser';
+// import bodyParser from 'body-parser';
 import adminLoginRoute from './routes/adminRoute.js';
 import facultyLoginRouter from './routes/facultyRoute.js';
 import studentLoginRouter from './routes/studentRoute.js';
 import addAnnouncementRouter from './routes/annoucementAdd.js';
-
+import Announcement from './models/annoucements.js';
 
 const app = express();
 const PORT = 3000;
@@ -17,16 +17,18 @@ app.set('view engine', 'ejs');
 app.use(express.json()); // Parses JSON request bodies
 app.use(express.urlencoded({ extended: true })); // Parses URL-encoded data
 
-// Session Middleware
-app.use(session({
-    secret: 'randomkey',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: false } // Set secure: true for HTTPS
-}));
-
-
 app.use(express.static('public'));
+
+app.get('/', async (req, res) => {
+  try {
+      const announcements = await Announcement.findAll({ order: [['createdAt', 'DESC']] });
+      res.render('dashboard', { announcements }); // Pass announcements to EJS
+  } catch (error) {
+      console.error('Error fetching announcements:', error);
+      res.status(500).send('Server error');
+  }
+});
+
 
 // Routes to the main page and login page
 app.get('/', (req, res) => res.render('dashboard')); // Root route
@@ -41,6 +43,7 @@ app.use("/studentLogin", studentLoginRouter);
 
 // Annoucement creation for the admin
 app.use("/addAnnoucement", addAnnouncementRouter);
+app.use("/", addAnnouncementRouter)
 
 // Start the server
 app.listen(PORT, () => {

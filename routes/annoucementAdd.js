@@ -1,31 +1,44 @@
-import express from 'express';
-import Announcement from '../models/annoucements.js'; // Import Sequelize model
+import express from "express"
+import Announcement from "../models/annoucements.js"
 
-const addAnnouncementRouter = express.Router();
+const announcementRouter = express.Router()
 
-// Create Announcement
-addAnnouncementRouter.post('/', async (req, res) => {
-    try {
-        const { message } = req.body;
-        if (!message) return res.status(400).json({ error: "Message is required" });
+// POST route to create a new announcement
+announcementRouter.post("/announcements", async (req, res) => {
+  try {
+    const { title, message } = req.body
+    const newAnnouncement = await Announcement.create({ title, message })
+    res.status(201).json(newAnnouncement)
+  } catch (error) {
+    console.error("Error creating announcement:", error)
+    res.status(500).json({ message: "Error creating announcement" })
+  }
+})
 
-        const newAnnouncement = await Announcement.create({ message });
+// GET route to fetch announcements and render dashboard
+announcementRouter.get("/dashboard", async (req, res) => {
+  try {
+    const announcements = await Announcement.findAll({
+      order: [['createdAt', 'DESC']]
+    })
+    res.render('dashboard', { announcements })
+  } catch (error) {
+    console.error("Error fetching announcements:", error)
+    res.render('dashboard', { announcements: [] })
+  }
+})
 
-        res.status(201).json(newAnnouncement);
-    } catch (error) {
-        console.error("Error creating announcement:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-});
+// GET route to fetch all announcements (for API calls)
+announcementRouter.get("/announcements", async (req, res) => {
+  try {
+    const announcements = await Announcement.findAll({
+      order: [['createdAt', 'DESC']]
+    })
+    res.json(announcements)
+  } catch (error) {
+    console.error("Error fetching announcements:", error)
+    res.status(500).json({ message: "Error fetching announcements" })
+  }
+})
 
-// Get All Announcements
-addAnnouncementRouter.get('/', async (req, res) => {
-    try {
-        const announcements = await Announcement.findAll();
-        res.status(200).json(announcements);
-    } catch (error) {
-        res.status(500).json({ error: "Server error" });
-    }
-});
-
-export default addAnnouncementRouter;
+export default announcementRouter
