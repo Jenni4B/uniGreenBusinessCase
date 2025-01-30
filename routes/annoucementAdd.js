@@ -19,7 +19,7 @@ announcementRouter.post("/announcements", async (req, res) => {
 announcementRouter.get("/dashboard", async (req, res) => {
   try {
     const announcements = await Announcement.findAll({
-      order: [['createdAt', 'DESC']]
+      order: [['created_at', 'DESC']]
     })
     res.render('dashboard', { announcements })
   } catch (error) {
@@ -32,7 +32,7 @@ announcementRouter.get("/dashboard", async (req, res) => {
 announcementRouter.get("/announcements", async (req, res) => {
   try {
     const announcements = await Announcement.findAll({
-      order: [['createdAt', 'DESC']]
+      order: [['created_at', 'DESC']]
     })
     res.json(announcements)
   } catch (error) {

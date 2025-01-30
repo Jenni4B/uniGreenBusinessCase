@@ -21,7 +21,7 @@ app.use(express.static('public'));
 
 app.get('/', async (req, res) => {
   try {
-      const announcements = await Announcement.findAll({ order: [['createdAt', 'DESC']] });
+      const announcements = await Announcement.findAll({ order: [['created_at', 'DESC']] });
       res.render('dashboard', { announcements }); // Pass announcements to EJS
   } catch (error) {
       console.error('Error fetching announcements:', error);

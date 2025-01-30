@@ -16,7 +16,13 @@ const Announcement = sequelize.define('Announcement', {
         allowNull: false, // Message is required
     },
 }, {
-    timestamps: true, // Adds createdAt and updatedAt fields automatically
+    tableName: 'announcements',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    underscored: true 
+    // Could not for the life of me figure out why it wouldn't just query what I had but I guess createdAt and updatedAt
+    // is an automatic thing I can't control so I'll just do this instead of changing the MySQL DB 😭
 });
 
 export default Announcement;

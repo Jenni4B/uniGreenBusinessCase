@@ -58,7 +58,7 @@
                             <div class="bg-gray-700 rounded p-2">
                                 <strong><%= announcement.title %></strong>: <%= announcement.message %>
                                 <br>
-                                <small class="text-muted">Posted on <%= new Date(announcement.createdAt).toLocaleString() %></small>
+                                <small class="text-muted">Posted on <%= new Date(announcement.created_at).toLocaleString() %></small>
                             </div>
                         <% }); %>
                     <% } else { %>
@@ -109,6 +109,36 @@
 
     <!-- JavaScript for Announcements -->
     <script>
+        // CALENDAR
+    document.addEventListener('DOMContentLoaded', function() {
+    const calendarEl = document.getElementById('calendar');
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        themeSystem: 'standard',
+        height: 'auto',
+        // Customize the calendar for dark theme
+        eventColor: '#4F46E5', // Indigo color for events
+        eventTextColor: '#ffffff',
+        // Add some sample events
+        events: [
+            {
+                title: 'Sample Event',
+                start: new Date(),
+                allDay: true
+            }
+        ],
+        // Additional styling for dark mode
+        dayCellClassNames: 'hover:bg-gray-700',
+        dayHeaderClassNames: 'text-black',
+        viewClassNames: 'text-gray-200'
+    });
+    calendar.render();
+});
     document.addEventListener('DOMContentLoaded', function() {
         const submitButton = document.getElementById('submitAnnouncement');
         const titleInput = document.getElementById('announcementTitle');
@@ -149,7 +179,7 @@
                 newAnnouncementElement.innerHTML = `
                     <strong>${newAnnouncement.title}</strong>: ${newAnnouncement.message}
                     <br>
-                    <small class="text-muted">Posted on ${new Date(newAnnouncement.createdAt).toLocaleString()}</small>
+                    <small class="text-muted">Posted on ${new Date(newAnnouncement.created_at).toLocaleString()}</small>
                 `;
                 announcementsContainer.insertBefore(newAnnouncementElement, announcementsContainer.firstChild);
 
