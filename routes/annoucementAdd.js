@@ -16,7 +16,7 @@ announcementRouter.post("/announcements", async (req, res) => {
 })
 
 // GET route to fetch announcements and render dashboard
-announcementRouter.get("/dashboard", async (req, res) => {
+announcementRouter.get("/", async (req, res) => {
   try {
     const announcements = await Announcement.findAll({
       order: [['created_at', 'DESC']]

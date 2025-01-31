@@ -3,7 +3,7 @@ import session from 'express-session'; // session management
 import adminLoginRoute from './routes/adminRoute.js';
 import facultyLoginRouter from './routes/facultyRoute.js';
 import studentLoginRouter from './routes/studentRoute.js';
-import addAnnouncementRouter from './routes/annoucementAdd.js';
+import announcementRouter from './routes/annoucementAdd.js';
 import Announcement from './models/annoucements.js';
 
 const app = express();
@@ -33,32 +33,32 @@ app.use((req, res, next) => {
 });
 
 // Dashboard route (pass session data)
-app.get('/dashboard', async (req, res) => {
-  try {
-      const announcements = await Announcement.findAll({ order: [['created_at', 'DESC']] });
-      res.render('dashboard', { 
-          announcements,
-          admin: { email: req.session.adminEmail || "Admin" } // Pass admin session data
-      }); 
-  } catch (error) {
-      console.error('Error fetching announcements:', error);
-      res.status(500).send('Server error');
-  }
-});
+// app.get('/dashboard', async (req, res) => {
+//   try {
+//       const announcements = await Announcement.findAll({ order: [['created_at', 'DESC']] });
+//       res.render('dashboard', { 
+//           announcements,
+//           admin: { email: req.session.adminEmail || "Admin" } // Pass admin session data
+//       }); 
+//   } catch (error) {
+//       console.error('Error fetching announcements:', error);
+//       res.status(500).send('Server error');
+//   }
+// });
 
-// Actually attempting to log in here
-app.use("/adminLogin", adminLoginRoute);
-app.use("/facultyLogin", facultyLoginRouter);
-app.use("/studentLogin", studentLoginRouter);
+// // Actually attempting to log in here
+// app.use("/adminLogin", adminLoginRoute);
+// app.use("/facultyLogin", facultyLoginRouter);
+// app.use("/studentLogin", studentLoginRouter);
 
-// Routes to the main page and login page
-app.get('/', (req, res) => res.render('dashboard')); 
-app.get('/studentlogin', (req, res) => res.render('./loginpages/studentloginpage')); 
-app.get('/facultylogin', (req, res) => res.render('./loginpages/facultyloginpage')); 
-app.get('/adminlogin', (req, res) => res.render('./loginpages/adminloginpage')); 
+// // Routes to the main page and login page
+// app.get('/', (req, res) => res.render('dashboard')); 
+// app.get('/studentlogin', (req, res) => res.render('./loginpages/studentloginpage')); 
+// app.get('/facultylogin', (req, res) => res.render('./loginpages/facultyloginpage')); 
+// app.get('/adminlogin', (req, res) => res.render('./loginpages/adminloginpage')); 
 
 // Announcement creation for the admin
-app.use("/addAnnoucement", addAnnouncementRouter);
+app.use("/", announcementRouter);
 
 // Start the server
 app.listen(PORT, () => {
