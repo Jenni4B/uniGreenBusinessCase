@@ -37,9 +37,9 @@ app.get('/facultylogin', (req, res) => res.render('./loginpages/facultyloginpage
 app.get('/adminlogin', (req, res) => res.render('./loginpages/adminloginpage')); // Admin login page
 
 // Actually attempting to log in here
-app.use("/adminLogin", adminLoginRoute);
-app.use("/facultyLogin", facultyLoginRouter);
-app.use("/studentLogin", studentLoginRouter);
+// app.use("/adminLogin", adminLoginRoute);
+// app.use("/facultyLogin", facultyLoginRouter);
+// app.use("/studentLogin", studentLoginRouter);
 
 // Annoucement creation for the admin
 app.use("/addAnnoucement", addAnnouncementRouter);

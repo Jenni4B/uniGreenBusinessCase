@@ -152,7 +152,7 @@
             }
 
             try {
-                const response = await fetch('/api/announcements', {
+                const response = await fetch('/announcements', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -163,6 +163,7 @@
 
                 if (!response.ok) {
                     throw new Error('Failed to create announcement');
+                    console.error(error)
                 }
 
                 const newAnnouncement = await response.json();
