@@ -180,7 +180,7 @@
                 newAnnouncementElement.innerHTML = `
                     <strong>${newAnnouncement.title}</strong>: ${newAnnouncement.message}
                     <br>
-                    <small class="text-muted">Posted on ${new Date(newAnnouncement.created_at).toLocaleString()}</small>
+                    <small class="text-white">Posted on ${new Date(newAnnouncement.created_at).toLocaleString()}</small>
                 `;
                 announcementsContainer.insertBefore(newAnnouncementElement, announcementsContainer.firstChild);
 
