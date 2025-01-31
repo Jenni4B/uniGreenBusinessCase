@@ -59,7 +59,6 @@ app.get('/adminlogin', (req, res) => res.render('./loginpages/adminloginpage'));
 
 // Announcement creation for the admin
 app.use("/addAnnoucement", addAnnouncementRouter);
-app.use("/", addAnnouncementRouter);
 
 // Start the server
 app.listen(PORT, () => {
