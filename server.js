@@ -14,10 +14,10 @@ app.set('view engine', 'ejs');
 
 // middleware
 app.use(session({
-    secret: 'randomkey',  // Change this to a strong secret in production
+    secret: 'randomkey', 
     resave: false,
     saveUninitialized: true,  // Ensures a session is created even if unmodified
-    cookie: { secure: false } // Set to `true` if using HTTPS
+    cookie: { secure: false } // using HTTPS
 }));
 
 // Middleware
