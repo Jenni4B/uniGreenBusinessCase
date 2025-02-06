@@ -29,8 +29,6 @@ app.use((req, res, next) => {
     next();
 });
 
-// Dashboard route (pass session data)
-
 // Actually attempting to log in here
 app.use("/auth", authRoute);
 // Routes to the main page and login page
