@@ -75,10 +75,10 @@ authRoute.post("/:userType/login", ensureGuest, async (req, res) => {
     console.log(`${userType} with ID ${req.session.userId} looking to access the ${userType} dashboard.`)
 
     // Redirect to dashboard after successful login
-    const typeDashboard = `/${userType}Dashboard`
+    const typeDashboard = `${userType}Dashboard`
     console.log(`Dashboard retrieved: ${typeDashboard}`)
     console.log(`DEBUGG::Successfully logged in as ${userType}`)
-     res.render('adminDashboard', {Announcement : "analytics"})
+     res.render(`${typeDashboard}`)
 
   } catch (error) {
     console.error(`Error during ${userType} login for email '${email}':`, error)

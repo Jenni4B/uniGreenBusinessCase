@@ -3,34 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>University Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #121212; /* Dark background */
-            color: #ffffff; /* White text */
-        }
-        .btn-green, header {
-            background-color: #14532d;
-            color: #ffffff;
-        }
-        .btn-green:hover {
-            background-color: #006941;
-        }
-        .input-dark {
-            background-color: #1E1E1E;
-            color: #ffffff;
-        }
+        body { background-color: #121212; color: #ffffff; }
+        .btn-green, header { background-color: #082f14; color: #ffffff; }
+        .btn-green:hover { background-color: #006941; }
+        .input-dark { background-color: #1E1E1E; color: #ffffff; }
+        .card { background-color: #1E1E1E; border-radius: 0.5rem; padding: 1rem; }
     </style>
 </head>
 
 <body class="min-h-screen">
-    
     <div class="container mx-auto px-4">
+        <!-- HEADER -->
         <header class="py-4">
             <nav class="flex justify-between items-center px-6">
                 <div class="space-x-4"> 
@@ -46,140 +36,179 @@
                 </div>
             </nav>
         </header>
-        
-        <!-- ANNOUNCEMENT SECTION -->
-        <hr class="border-gray-700 my-4">
-        <main class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <section>
-                <h2 class="text-2xl font-bold mb-4">Announcements</h2>
-                <div class="bg-gray-800 rounded-lg p-4 space-y-4" id="announcementsContainer">
 
-                    <!-- Announcement Modal -->
-                    <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content bg-gray-800 text-white">
-                                <div class="modal-header border-gray-700">
-                                    <h5 class="modal-title" id="announcementModalLabel">New Announcement</h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- QUICK STATS SECTION -->
+        <section class="grid grid-cols-1 md:grid-cols-4 gap-4 my-8">
+            <div class="card text-center">
+                <h3 class="text-lg font-semibold">Students</h3>
+                <p class="text-3xl font-bold">4,532</p>
+            </div>
+            <div class="card text-center">
+                <h3 class="text-lg font-semibold">Faculty</h3>
+                <p class="text-3xl font-bold">230</p>
+            </div>
+            <div class="card text-center">
+                <h3 class="text-lg font-semibold">Courses</h3>
+                <p class="text-3xl font-bold">320</p>
+            </div>
+            <div class="card text-center">
+                <h3 class="text-lg font-semibold">Departments</h3>
+                <p class="text-3xl font-bold">18</p>
+            </div>
+        </section>
+
+        <!-- MAIN CONTENT GRID -->
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- LEFT COLUMN -->
+            <section class="max-w-md bg-green-950 rounded-lg p-4 space-y-3">
+                <h2 class="text-lg font-bold text-white">Announcements</h2>
+
+                <div id="announcementsContainer" class="space-y-2">
+                    <!-- Dynamically populated with announcements
+                     For some reason it doesn't work when I try to populate it with the announcements from the database. -->
+                </div>
+
+                <!-- Button to Open Modal -->
+                <button type="button" class="w-full bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md flex items-center justify-center space-x-2" 
+                    data-bs-toggle="modal" data-bs-target="#announcementModal">
+                    <i data-feather="plus" class="w-5 h-5"></i>
+                    <span>New Announcement</span>
+                </button>
+            
+                <!-- Announcement Modal -->
+                <div class="modal fade" id="announcementModal" tabindex="-1" aria-labelledby="announcementModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content bg-gray-800 text-white">
+                            <div class="modal-header border-gray-700">
+                                <h5 class="modal-title" id="announcementModalLabel">New Announcement</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="announcementTitle" class="form-label">Title</label>
+                                    <input type="text" class="form-control bg-gray-700 text-black" id="announcementTitle" placeholder="Enter announcement title" required>
                                 </div>
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label for="announcementTitle" class="form-label">Title</label>
-                                        <input type="text" class="form-control bg-gray-700 text-black" id="announcementTitle" placeholder="Enter announcement title" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="announcementMessage" class="form-label">Message</label>
-                                        <textarea id="announcementMessage" class="form-control bg-gray-700 text-black" placeholder="Type your announcement..." rows="4" required></textarea>
-                                    </div>
+                                <div class="mb-3">
+                                    <label for="announcementMessage" class="form-label">Message</label>
+                                    <textarea id="announcementMessage" class="form-control bg-gray-700 text-black" placeholder="Type your announcement..." rows="4" required></textarea>
                                 </div>
-                                <div class="modal-footer border-gray-700">
-                                    <button type="button" id="submitAnnouncement" class="btn btn-success">Submit</button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                </div>
+                            </div>
+                            <div class="modal-footer border-gray-700">
+                                <button type="button" id="submitAnnouncement" class="btn btn-success">Submit</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Button to Open Modal -->
-                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#announcementModal">
-                        <i data-feather="plus" class="w-6 h-6"></i>
-                    </button>
                 </div>
+            
+
+                <!-- COURSE MANAGEMENT -->
+                <!-- <div class="max-w-lg ml-4 w-full mt-6">Same width constraint for consistency
+                    <h2 class="text-xl font-semibold mb-2">Course Management</h2>
+                    <div class="card space-y-3 p-3 bg-gray-800 rounded-lg">
+                        <input type="text" class="form-control bg-gray-700 text-white py-1 text-sm" placeholder="Search Courses...">
+                        <button class="btn btn-green w-full py-2 text-sm">Add New Course</button>
+                    </div>
+                </div> -->
+
             </section>
 
-            <section> <!--Calendar Section-->
-                <h2 class="text-2xl font-bold mb-4">Schedule</h2>
-                <div class="bg-gray-800 rounded-lg p-4">
-                    <div id="calendar"></div>
+            <!-- RIGHT COLUMN -->
+            <section class="space-y-4 space-x-0 lg:space-x-8 lg:col-span-1.5">
+                <!-- CALENDAR -->
+                <div class="w-full lg:col-span-">
+                    <h2 class="text-2xl font-bold mb-4">Schedule</h2>
+                    <div class="bg-gray-800 rounded-lg p-6">
+                        <div id="calendar"></div>
+                    </div>
                 </div>
+            </section>
+                            <!-- TASK LIST -->
+            <section class="max-w-lg ml-4 w-full"> <!-- Same width constraint for consistency -->
+                <h2 class="text-2xl font-bold mb-4">Admin Tasks</h2>
+                <div class="card space-y-2">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="mr-2"> Approve Course Registrations
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" class="mr-2"> Schedule Faculty Meeting
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" class="mr-2"> Review Student Appeals
+                    </label>
+                 </div>
             </section>
         </main>
     </div>
 
-    <!-- JavaScript for Announcements -->
+    <!-- JAVASCRIPT: FEATHER, CALENDAR, AND ANNOUNCEMENTS -->
     <script>
-        // CALENDAR
-    document.addEventListener('DOMContentLoaded', function() {
-    const calendarEl = document.getElementById('calendar');
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-        },
-        themeSystem: 'standard',
-        height: 'auto',
-        // Customize the calendar for dark theme
-        eventColor: '#4F46E5', // Indigo color for events
-        eventTextColor: '#ffffff',
-        // Add some sample events
-        events: [
-            {
-                title: 'Sample Event',
-                start: new Date(),
-                allDay: true
-            }
-        ],
-        // Additional styling for dark mode
-        dayCellClassNames: 'hover:bg-gray-700',
-        dayHeaderClassNames: 'text-black',
-        viewClassNames: 'text-gray-200'
-    });
-    calendar.render();
-});
-    document.addEventListener('DOMContentLoaded', function() {
-        const submitButton = document.getElementById('submitAnnouncement');
-        const titleInput = document.getElementById('announcementTitle');
-        const messageInput = document.getElementById('announcementMessage');
-        const modal = new bootstrap.Modal(document.getElementById('announcementModal'));
+        feather.replace();
 
-        submitButton.addEventListener('click', async function() {
-            if (titleInput.value.trim() === '' || messageInput.value.trim() === '') {
-                alert('Please fill out both the title and message fields.');
-                return;
-            }
+        // CALENDAR INIT
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendar = new FullCalendar.Calendar(document.getElementById('calendar'), {
+                initialView: 'dayGridMonth',
+                height: 550, 
+                aspectRatio: 2,
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                themeSystem: 'standard',
+                eventColor: '#4F46E5',
+                eventTextColor: '#ffffff',
+                events: [{ title: 'University Board Meeting', start: new Date(), allDay: true }]
+            });
+            calendar.render();
+        });
 
-            try {
-                const response = await fetch('/announcements', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        title: titleInput.value,
-                        message: messageInput.value,
-                    }),
-                });
+        // ANNOUNCEMENT SUBMISSION HANDLER
+        document.addEventListener('DOMContentLoaded', function() {
+            const submitButton = document.getElementById('submitAnnouncement');
+            const titleInput = document.getElementById('announcementTitle');
+            const messageInput = document.getElementById('announcementMessage');
+            const modal = new bootstrap.Modal(document.getElementById('announcementModal'));
 
-                if (!response.ok) {
-                    throw new Error('Failed to create announcement');
-                    console.error(error)
+            submitButton.addEventListener('click', async function() {
+                if (titleInput.value.trim() === '' || messageInput.value.trim() === '') {
+                    alert('Please fill out both the title and message fields.');
+                    return;
                 }
 
-                const newAnnouncement = await response.json();
+                try {
+                    const response = await fetch('/announcements', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            title: titleInput.value,
+                            message: messageInput.value,
+                        }),
+                    });
 
-                // Clear the form and close the modal
-                titleInput.value = '';
-                messageInput.value = '';
-                modal.hide();
+                    if (!response.ok) throw new Error('Failed to create announcement');
+                    const newAnnouncement = await response.json();
 
-                // Update UI dynamically
-                const announcementsContainer = document.getElementById('announcementsContainer');
-                const newAnnouncementElement = document.createElement('div');
-                newAnnouncementElement.className = 'bg-gray-700 rounded p-2';
-                newAnnouncementElement.innerHTML = `
-                    <strong>${newAnnouncement.title}</strong>: ${newAnnouncement.message}
-                    <br>
-                    <small class="text-white">Posted on ${new Date(newAnnouncement.created_at).toLocaleString()}</small>
-                `;
-                announcementsContainer.insertBefore(newAnnouncementElement, announcementsContainer.firstChild);
+                    // Clear form & close modal
+                    titleInput.value = ''; messageInput.value = ''; modal.hide();
 
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to create announcement. Please try again.');
-            }
+                    // Update UI dynamically
+                    const announcementsContainer = document.getElementById('announcementsContainer');
+                    const newAnnouncementElement = document.createElement('div');
+                    newAnnouncementElement.className = 'bg-gray-700 rounded p-2';
+                    newAnnouncementElement.innerHTML = `
+                        <strong>${newAnnouncement.title}</strong>: ${newAnnouncement.message}
+                        <br><small class="text-white">Posted on ${new Date(newAnnouncement.created_at).toLocaleString()}</small>
+                    `;
+                    announcementsContainer.insertBefore(newAnnouncementElement, announcementsContainer.firstChild);
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Failed to create announcement. Please try again.');
+                }
+            });
         });
-    });
     </script>
-
 </body>
 </html>
