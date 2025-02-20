@@ -4,6 +4,7 @@ import { verifyPassword, verifyTwoStep } from "../middleware/verification.js"
 import admin from "../models/admin.js"
 import faculty from "../models/faculty.js"
 import student from "../models/student.js"
+import Announcement from "../models/annoucements.js"
 
 const authRoute = express.Router()
 
@@ -76,8 +77,8 @@ authRoute.post("/:userType/login", ensureGuest, async (req, res) => {
     // Redirect to dashboard after successful login
     const typeDashboard = `/${userType}Dashboard`
     console.log(`Dashboard retrieved: ${typeDashboard}`)
-    console.log(`Successfully logged in as ${userType}`)
-    return typeDashboard
+    console.log(`DEBUGG::Successfully logged in as ${userType}`)
+     res.render('adminDashboard', {Announcement : "analytics"})
 
   } catch (error) {
     console.error(`Error during ${userType} login for email '${email}':`, error)

@@ -25,7 +25,8 @@ app.use(express.static('public'));
 
 // Ensure sessions are available before routing
 app.use((req, res, next) => {
-    console.log("Session Data:", req.session); // Debugging log
+    // console.log("Session Data:", req.session); // Debugging log
+
     next();
 });
 
@@ -35,9 +36,9 @@ app.use("/", authRoute);
 // Routes to the main page and login page
 
 app.get('/', (req, res) => res.render('homepage')); 
+app.get('/adminlogin', (req, res) => res.render('./loginpages/adminloginpage')); 
 app.get('/studentlogin', (req, res) => res.render('./loginpages/studentloginpage')); 
 app.get('/facultylogin', (req, res) => res.render('./loginpages/facultyloginpage')); 
-app.get('/adminlogin', (req, res) => res.render('./loginpages/adminloginpage')); 
 
 // Announcement creation for the admin
 app.use("/", announcementRouter);
