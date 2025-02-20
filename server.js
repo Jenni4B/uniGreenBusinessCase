@@ -30,8 +30,10 @@ app.use((req, res, next) => {
 });
 
 // Actually attempting to log in here
-app.use("/auth", authRoute);
+app.use("/", authRoute);
+
 // Routes to the main page and login page
+
 app.get('/', (req, res) => res.render('homepage')); 
 app.get('/studentlogin', (req, res) => res.render('./loginpages/studentloginpage')); 
 app.get('/facultylogin', (req, res) => res.render('./loginpages/facultyloginpage')); 
