@@ -66,6 +66,17 @@
                 <div id="announcementsContainer" class="space-y-2">
                     <!-- Dynamically populated with announcements
                      For some reason it doesn't work when I try to populate it with the announcements from the database. -->
+                     <% if (announcements && announcements.length > 0) { %>
+                        <% announcements.forEach(announcement => { %>
+                            <div class="bg-gray-700 rounded p-2">
+                                <strong><%= announcement.title %></strong>: <%= announcement.message %>
+                                <br>
+                                <small class="text-white">Posted on <%= new Date(announcement.created_at).toLocaleString() %></small>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <p>No announcements yet.</p>
+                    <% } %>
                 </div>
 
                 <!-- Button to Open Modal -->
