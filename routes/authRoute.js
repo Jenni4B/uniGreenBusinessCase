@@ -8,118 +8,107 @@ import Announcement from "../models/annoucements.js";
 
 const authRoute = express.Router();
 
-// Handle user login and validate credentials
+// Select user model based on userType
+// Condenses the switch and if statements to a single function
+
+const getUserModel = (userType) => {
+  const models = { admin, faculty, student };
+  console.log(`userType: ${userType}`); // Checking if the user type is being passed through
+  return models[userType] || null;
+}; 
+
+// Fetch announcements (ordered by date)
+// Before, I had repeated code (mb lol) to see where the error occurred
+// when fetching announcements
+// Now, I have a single function to handle it.
+const fetchAnnouncements = async () =>
+  await Announcement.findAll({ order: [["created_at", "DESC"]] });
+  console.log(`Announcements being loaded...`); // Checking if announcements are being fetched
+
+// Handle dashboard rendering with announcements
+// simpler function to render the dashboard
+// with announcements and user data
+const renderDashboard = async (res, dashboard, user, error = null) => {
+    // If I make changes, it'll be easier to update now :)
+  try {
+    const announcements = await fetchAnnouncements();
+
+    // if successful, render the dashboard and pass the user data + announcements
+    res.render(dashboard, { user, announcements, error });
+    console.log(`Announcements loaded!`); // Checking if the announcements/dashboard is being loaded
+
+  } catch (fetchError) {
+    console.error(`Error loading announcements for ${dashboard}:`, fetchError);
+    res.status(500).render(dashboard, { user, announcements: [], error: "Failed to load announcements" });
+  }
+};
+
+//Handles all userType logins through authRoute
 authRoute.post("/:userType/login", ensureGuest, async (req, res) => {
+  
   const { email, pwd_hash, two_stepHash } = req.body;
   const { userType } = req.params;
-  console.log(`Received ${userType} login request:`, req.body);
+  console.log(`Login attempt: ${userType} - ${email}`);
+    // 'Login attempt: admin/faculty/student - example@email.com'
 
+    // Check if all fields are filled
   try {
     if (!email || !pwd_hash || !two_stepHash) {
-      console.log("Login failed: Missing required fields.");
       return res.status(400).json({ message: "All fields are required." });
     }
 
-    let UserModel;
-    switch (userType) {
-      case "admin":
-        UserModel = admin;
-        break;
-      case "faculty":
-        UserModel = faculty;
-        break;
-      case "student":
-        UserModel = student;
-        break;
-      default:
-        return res.status(400).json({ message: "Invalid user type." });
-    }
+    // Get the user model based on userType
+    const UserModel = getUserModel(userType);
+    if (!UserModel) return res.status(400).json({ message: "Invalid user type." });
 
-    const validUser = await UserModel.findOne({ where: { email } });
-    if (!validUser) {
-      console.log(`Login failed: ${userType} with email '${email}' not found.`);
-      return res.status(404).json({ message: `${userType} not found.` });
-    }
+    // Check if user exists and password matches
+    const user = await UserModel.findOne({ where: { email } });
+    if (!user) return res.status(404).json({ message: `${userType} not found.` });
 
-    const userId = validUser[`${userType}_id`];
-    if (!userId) {
-      console.log(`Login failed: ${userType} ID is missing for email '${email}'.`);
-      return res.status(400).json({ message: `Invalid ${userType} configuration.` });
-    }
+    // If the user_id/type doesn't exist, throw an error message
+    const userId = user[`${userType}_id`];
+    if (!userId) return res.status(400).json({ message: `Invalid ${userType} configuration.` });
 
-    const pwdMatch = await verifyPassword(pwd_hash, validUser.pwd_hash);
-    if (!pwdMatch) {
-      console.log(`Login failed: Invalid password for ${userType} email '${email}'.`);
-      return res.status(401).json({ message: "Invalid credentials." });
-    }
+    // Verify password and two-step authentication
+    const [pwdMatch, twoStepMatch] = await Promise.all([
+      verifyPassword(pwd_hash, user.pwd_hash),
+      verifyTwoStep(two_stepHash, user.two_stepHash),
+    ]);
 
-    const twoStepMatch = await verifyTwoStep(two_stepHash, validUser.two_stepHash);
-    if (!twoStepMatch) {
-      console.log(`Login failed: Invalid two-step authentication for ${userType} email '${email}'.`);
-      return res.status(401).json({ message: "Invalid credentials." });
-    }
+    // if not a match, throw an error message
+    if (!pwdMatch || !twoStepMatch) return res.status(401).json({ message: "Invalid credentials." });
 
+    // Set session data and render dashboard
     req.session.userId = userId;
-    req.session.userEmail = validUser.email;
+    req.session.userEmail = user.email;
     req.session.userType = userType;
 
-    console.log(`Login successful: ${userType} ID ${userId}, Email: ${validUser.email}`);
-    console.log(`${userType} with ID ${req.session.userId} looking to access the ${userType} dashboard.`);
+    // Success message
+    console.log(`Login success: ${userType} (${userId}) - ${email}`);
+    await renderDashboard(res, `${userType}Dashboard`, { email: user.email });
 
-    const typeDashboard = `${userType}Dashboard`;
-
-    // Fetch announcements before rendering dashboard
-    try {
-      const announcements = await Announcement.findAll({
-        order: [["created_at", "DESC"]],
-      });
-
-      console.log("Loaded announcements:", announcements); // Debugging
-      res.render(typeDashboard, { announcements });
-    } catch (error) {
-      console.error("Error loading dashboard announcements:", error);
-      res.status(500).render(typeDashboard, {
-        announcements: [],
-        error: "Failed to load announcements",
-      });
-    }
   } catch (error) {
-    console.error(`Error during ${userType} login for email '${email}':`, error);
-    return res.status(500).json({ message: "An error occurred during login." });
+    // error thrown
+    console.error(`Login error (${userType}):`, error);
+    res.status(500).json({ message: "An error occurred during login." });
   }
 });
 
-// Render the user dashboard with session validation & announcements
+// Validates session & renders dashboard
 authRoute.get(`/:userType/Dashboard`, async (req, res) => {
+  
+  // Is the user allowed to be here?
   const { userType } = req.params;
-  console.log(`Received request for ${userType} dashboard
-    Session ID: ${req.session.userId}
-    User Email: ${req.session.userEmail}`);
+  console.log(`Dashboard access request: ${userType}`);
 
+  // If not, redirect to login page
   if (!req.session.userId || req.session.userType !== userType) {
-    console.log(`Unauthorized access to /${userType}Dashboard. Redirecting to /${userType}Login.`);
+    console.log(`Unauthorized access. Redirecting to /${userType}Login.`);
     return res.redirect(`/${userType}Login`);
   }
 
-  try {
-    // 🔥 Fetch announcements again here for direct dashboard route
-    const announcements = await Announcement.findAll({
-      order: [["created_at", "DESC"]],
-    });
-
-    console.log(`Loaded announcements for ${userType}:`, announcements);
-    res.render(`${userType}Dashboard`, {
-      user: { email: req.session.userEmail },
-      announcements,
-    });
-  } catch (error) {
-    console.error("Error loading dashboard announcements:", error);
-    res.status(500).render(`${userType}Dashboard`, {
-      user: { email: req.session.userEmail },
-      announcements: [],
-      error: "Failed to load announcements",
-    });
-  }
+  // Render :)
+  await renderDashboard(res, `${userType}Dashboard`, { email: req.session.userEmail });
 });
 
 export default authRoute;
