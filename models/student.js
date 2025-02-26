@@ -31,6 +31,10 @@ const student = dbconn.define('student', {
     pwd_hash: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    two_StepHash: {
+      type: DataTypes.STRING,
+      allowNull: false,
     }
   });
   

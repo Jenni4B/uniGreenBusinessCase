@@ -10,7 +10,6 @@ const authRoute = express.Router();
 
 // Select user model based on userType
 // Condenses the switch and if statements to a single function
-
 const getUserModel = (userType) => {
   const models = { admin, faculty, student };
   console.log(`userType: ${userType}`); // Checking if the user type is being passed through
@@ -34,7 +33,7 @@ const renderDashboard = async (res, dashboard, user, error = null) => {
     const announcements = await fetchAnnouncements();
 
     // if successful, render the dashboard and pass the user data + announcements
-    res.render(dashboard, { user, announcements, error });
+    res.render(dashboard, { user, announcements, error }); // if the error is null then it won't be rendered
     console.log(`Announcements loaded!`); // Checking if the announcements/dashboard is being loaded
 
   } catch (fetchError) {
@@ -85,12 +84,12 @@ authRoute.post("/:userType/login", ensureGuest, async (req, res) => {
 
     // Success message
     console.log(`Login success: ${userType} (${userId}) - ${email}`);
-    await renderDashboard(res, `${userType}Dashboard`, { email: user.email });
+    await renderDashboard(res, `${userType}Dashboard`, { email: user.email }, null);
 
   } catch (error) {
     // error thrown
     console.error(`Login error (${userType}):`, error);
-    res.status(500).json({ message: "An error occurred during login." });
+    await renderDashboard(res, `${userType}Dashboard`, { email: req.body.email }, "An error occurred during login.");
   }
 });
 
