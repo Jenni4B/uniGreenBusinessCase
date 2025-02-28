@@ -9,104 +9,104 @@ import Announcement from "../models/annoucements.js";
 const authRoute = express.Router();
 
 // Select user model based on userType
-// Condenses the switch and if statements to a single function
 const getUserModel = (userType) => {
   const models = { admin, faculty, student };
-  console.log(`userType: ${userType}`); // Checking if the user type is being passed through
   return models[userType] || null;
-}; 
+};
 
 // Fetch announcements (ordered by date)
-// Before, I had repeated code (mb lol) to see where the error occurred
-// when fetching announcements
-// Now, I have a single function to handle it.
-const fetchAnnouncements = async () =>
-  await Announcement.findAll({ order: [["created_at", "DESC"]] });
-  console.log(`Announcements being loaded...`); // Checking if announcements are being fetched
+const fetchAnnouncements = async () => {
+  console.log("Fetching announcements...");
+  return await Announcement.findAll({ order: [["created_at", "DESC"]] });
+};
 
-// Handle dashboard rendering with announcements
-// simpler function to render the dashboard
-// with announcements and user data
+// Handle dashboard rendering with announcements & prevent caching
 const renderDashboard = async (res, dashboard, user, error = null) => {
-    // If I make changes, it'll be easier to update now :)
   try {
     const announcements = await fetchAnnouncements();
 
-    // if successful, render the dashboard and pass the user data + announcements
-    res.render(dashboard, { user, announcements, error }); // if the error is null then it won't be rendered
-    console.log(`Announcements loaded!`); // Checking if the announcements/dashboard is being loaded
+    res.set("Cache-Control", "no-store, no-cache, must-revalidate, private"); // Prevent back navigation
+    res.render(dashboard, { user, announcements, error });
 
+    console.log(`Dashboard rendered: ${dashboard}`);
   } catch (fetchError) {
     console.error(`Error loading announcements for ${dashboard}:`, fetchError);
     res.status(500).render(dashboard, { user, announcements: [], error: "Failed to load announcements" });
   }
 };
 
-//Handles all userType logins through authRoute
+// Handles userType login
 authRoute.post("/:userType/login", ensureGuest, async (req, res) => {
-  
   const { email, pwd_hash, two_stepHash } = req.body;
   const { userType } = req.params;
-  console.log(`Login attempt: ${userType} - ${email}`);
-    // 'Login attempt: admin/faculty/student - example@email.com'
 
-    // Check if all fields are filled
+  console.log(`Login attempt: ${userType} - ${email}`);
+
   try {
     if (!email || !pwd_hash || !two_stepHash) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
-    // Get the user model based on userType
     const UserModel = getUserModel(userType);
     if (!UserModel) return res.status(400).json({ message: "Invalid user type." });
 
-    // Check if user exists and password matches
     const user = await UserModel.findOne({ where: { email } });
     if (!user) return res.status(404).json({ message: `${userType} not found.` });
 
-    // If the user_id/type doesn't exist, throw an error message
     const userId = user[`${userType}_id`];
     if (!userId) return res.status(400).json({ message: `Invalid ${userType} configuration.` });
 
-    // Verify password and two-step authentication
     const [pwdMatch, twoStepMatch] = await Promise.all([
       verifyPassword(pwd_hash, user.pwd_hash),
       verifyTwoStep(two_stepHash, user.two_stepHash),
     ]);
 
-    // if not a match, throw an error message
     if (!pwdMatch || !twoStepMatch) return res.status(401).json({ message: "Invalid credentials." });
 
-    // Set session data and render dashboard
+    // Set session data
     req.session.userId = userId;
     req.session.userEmail = user.email;
     req.session.userType = userType;
 
-    // Success message
     console.log(`Login success: ${userType} (${userId}) - ${email}`);
-    await renderDashboard(res, `${userType}Dashboard`, { email: user.email }, null);
+    await renderDashboard(res, `${userType}Dashboard`, { email: user.email });
 
   } catch (error) {
-    // error thrown
     console.error(`Login error (${userType}):`, error);
     await renderDashboard(res, `${userType}Dashboard`, { email: req.body.email }, "An error occurred during login.");
   }
 });
 
-// Validates session & renders dashboard
+// Logout user and redirect to homepage (prevents back button restoring session)
+authRoute.post("/logout", (req, res) => {
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Error destroying session:", err);
+        return res.status(500).json({ message: "Logout failed. Please try again." });
+      }
+      console.log("User successfully logged out.");
+
+      res.set("Cache-Control", "no-store, no-cache, must-revalidate, private"); // Prevents browser caching
+      res.redirect("/");
+    });
+  } else {
+    res.redirect("/");
+  }
+});
+
+// Validates session, renders dashboard & prevents cached access
 authRoute.get(`/:userType/Dashboard`, async (req, res) => {
-  
-  // Is the user allowed to be here?
   const { userType } = req.params;
   console.log(`Dashboard access request: ${userType}`);
 
-  // If not, redirect to login page
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private"); // Ensures a fresh session check
+
   if (!req.session.userId || req.session.userType !== userType) {
     console.log(`Unauthorized access. Redirecting to /${userType}Login.`);
     return res.redirect(`/${userType}Login`);
   }
 
-  // Render :)
   await renderDashboard(res, `${userType}Dashboard`, { email: req.session.userEmail });
 });
 

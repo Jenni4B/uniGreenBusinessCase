@@ -25,14 +25,18 @@
             <nav class="flex justify-between items-center px-6">
                 <div class="space-x-4"> 
                     <button class="bg-gray-800 text-white px-4 py-2 rounded-full">Home</button>
-                    <button class="bg-gray-800 text-white px-4 py-2 rounded-full">Dashboard</button>
-                    <button class="bg-gray-800 text-white px-4 py-2 rounded-full">Admin</button>
+                    <button class="bg-gray-800 text-white px-4 py-2 rounded-full">Dashboard</button> 
                 </div>
                 <div class="flex items-center space-x-4">
                     <i data-feather="bell" class="text-orange-500"></i>
-                    <div class="w-8 h-8 bg-gray-500 rounded-full"></div>
                     <button class="bg-gray-800 text-white px-4 py-2 rounded-full">Profile</button>
-                    <button class="bg-gray-800 text-white px-4 py-2 rounded-full">LogOut</button>
+                    
+                    <form action="/logout" method="POST">
+                        <button class="bg-gray-800 text-white px-4 py-2 rounded-full" type="submit">
+                            LogOut
+                        </button>
+                    </form>
+                    
                 </div>
             </nav>
         </header>
@@ -111,16 +115,6 @@
                     </div>
                 </div>
             
-
-                <!-- COURSE MANAGEMENT -->
-                <!-- <div class="max-w-lg ml-4 w-full mt-6">Same width constraint for consistency
-                    <h2 class="text-xl font-semibold mb-2">Course Management</h2>
-                    <div class="card space-y-3 p-3 bg-gray-800 rounded-lg">
-                        <input type="text" class="form-control bg-gray-700 text-white py-1 text-sm" placeholder="Search Courses...">
-                        <button class="btn btn-green w-full py-2 text-sm">Add New Course</button>
-                    </div>
-                </div> -->
-
             </section>
 
             <!-- RIGHT COLUMN -->
