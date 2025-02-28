@@ -1,4 +1,4 @@
-# **GreenField Universit**  
+# **GreenField University**  
 
 ## 📌 **Project Overview**  
 This project is a **University Admin Dashboard** that provides a **secure authentication system** for different user roles:  
